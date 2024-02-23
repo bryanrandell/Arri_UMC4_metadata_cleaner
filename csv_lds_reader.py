@@ -37,48 +37,65 @@ def extract_tc_from_string(tc_string: str) -> tuple:
 
 
 # todo very slow if offset is large
-# def apply_offset_in_frames(tuple_int_tc: tuple, offset_in_frames: int, project_fps: int = 24) -> tuple:
-#     start_time_function = time.time()
-#     hours, minutes, seconds, frames = tuple_int_tc
-#     if offset_in_frames > 0:
-#         for i in range(offset_in_frames):
-#             if frames == project_fps:
-#                 seconds += 1
-#                 frames = 0
-#             if seconds == 60:
-#                 minutes += 1
-#                 seconds = 0
-#             # print(i, minutes, sep=" mins-- ")
-#             if minutes == 60:
-#                 hours += 1
-#                 minutes = 0
-#             # print(i, hours, sep=" hours-- ")
-#             # print("{} - {} - {} - {}".format(hours, minutes, seconds, frames), end='\r')
-#             frames += 1
-#             print(f"{time.time() - start_time_function:.2f} seconds", end="\r")
-#     else:
-#         for i in range(abs(offset_in_frames)):
-#             if frames == 0:
-#                 seconds -= 1
-#                 frames = project_fps
-#             if seconds == 0:
-#                 minutes -= 1
-#                 seconds = 60
-#             if minutes == 0:
-#                 hours -= 1
-#                 minutes = 60
-#             # print(i, minutes, sep=" mins-- ")
-#             # print("{} - {} - {} - {}".format(hours, minutes, seconds, frames), end='\r')
-#             frames -= 1
-#
-#     return hours, minutes, seconds, frames
-#
-#
-# def reconstruct_tc_from_tuple_int(tuple_int_tc: tuple) -> str:
-#     return '{:02d}:{:02d}:{:02d}:{:02d}'.format(tuple_int_tc[0],
-#                                                 tuple_int_tc[1],
-#                                                 tuple_int_tc[2],
-#                                                 tuple_int_tc[3])
+def apply_offset_in_frames_not_opti(tuple_int_tc: tuple, offset_in_frames: int, project_fps: int = 24) -> tuple:
+    start_time_function = time.time()
+    hours, minutes, seconds, frames = tuple_int_tc
+    if offset_in_frames > 0:
+        for i in range(offset_in_frames):
+            if frames == project_fps:
+                seconds += 1
+                frames = 0
+            if seconds == 60:
+                minutes += 1
+                seconds = 0
+            # print(i, minutes, sep=" mins-- ")
+            if minutes == 60:
+                hours += 1
+                minutes = 0
+            # print(i, hours, sep=" hours-- ")
+            # print("{} - {} - {} - {}".format(hours, minutes, seconds, frames), end='\r')
+            frames += 1
+            print(f"{time.time() - start_time_function:.2f} seconds", end="\r")
+    else:
+        for i in range(abs(offset_in_frames)):
+            if frames == 0:
+                seconds -= 1
+                frames = project_fps
+            if seconds == 0:
+                minutes -= 1
+                seconds = 60
+            if minutes == 0:
+                hours -= 1
+                minutes = 60
+            # print(i, minutes, sep=" mins-- ")
+            # print("{} - {} - {} - {}".format(hours, minutes, seconds, frames), end='\r')
+            frames -= 1
+
+    return hours, minutes, seconds, frames
+
+
+def apply_offset_in_frames(tuple_int_tc: tuple, offset_in_frames: int, project_fps: int = 24) -> tuple:
+    hours, minutes, seconds, frames = tuple_int_tc
+    total_frames = frames + seconds * project_fps + minutes * project_fps * 60 + hours * project_fps * 3600
+    total_frames += offset_in_frames
+
+    new_hours = total_frames // (project_fps * 3600)
+    total_frames %= project_fps * 3600
+
+    new_minutes = total_frames // (project_fps * 60)
+    total_frames %= project_fps * 60
+
+    new_seconds = total_frames // project_fps
+    new_frames = total_frames % project_fps
+
+    return new_hours, new_minutes, new_seconds, new_frames
+
+
+def reconstruct_tc_from_tuple_int(tuple_int_tc: tuple) -> str:
+    return '{:02d}:{:02d}:{:02d}:{:02d}'.format(tuple_int_tc[0],
+                                                tuple_int_tc[1],
+                                                tuple_int_tc[2],
+                                                tuple_int_tc[3])
 
 
 def tc_offsetter(rows: list, offset_in_frames: int) -> list:

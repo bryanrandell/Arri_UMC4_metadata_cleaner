@@ -2,6 +2,7 @@ import os
 import shutil
 import csv_lds_reader as csv_read
 from ffmpeg_command_probe import create_dict_meta_for_video_in_day_folder
+from silverstack_csv_reader import create_dict_from_silverstack_csv
 
 # todo make 2 versions by detection video or silverstack csv
 
@@ -14,7 +15,7 @@ def comparing_csv_tc_with_video_files(dict_video_tc_frame_path: dict, shooting_d
     # todo this function is too long parse it into smaller fonction, easier to understand
     compare tc from csv to tc from video with same reel name, then make a copy to the csv file including
     video filename in prefix and crop rows with tc anterior to the start tc video
-    # todo : implement a dummy row to add row at the end of csv corresponding to en TC
+    # todo : implement a dummy row to add row at the end of csv corresponding to end TC
     :param dict_video_tc_frame_path:
     :param dict_video_tc_frame_path, shooting_day_folder_path:
     :return: None
@@ -113,14 +114,20 @@ def extract_metadata_modified(path_to_all_shooting_days: str, copy_path: str,
 
 # todo the path could be redondant, check if only one path from the shooting day would suffice
 # iterate over all the folder days
-def main(day_of_shooting_folder_path: str = "METADATA/") -> None:
+def main_edit_UMC_csv_from_silverstack_csv(day_of_shooting_folder_path: str = "METADATA/") -> None:
+    dict_silverstack = create_dict_from_silverstack_csv(silverstack_csv)
+    comparing_csv_tc_with_video_files(dict_silverstack, day_of_shooting_folder_path)
+
+def main_edit_UMC_csv_from_video_files(day_of_shooting_folder_path: str = "METADATA/") -> None:
     dict_video = create_dict_meta_for_video_in_day_folder(day_of_shooting_folder_path)
     comparing_csv_tc_with_video_files(dict_video, day_of_shooting_folder_path)
 
 
 if __name__ == "__main__":
-    dict_test = {'C102C001_2207262N': {'startTC': '17:17:10:14', 'frames': 8172,
-                                       'file path': 'VIDEO/C102CSQE/C102CSQE/Clip/C102C001_2207262N/C102C001_2207262N.mxf'}}
-    video_file_path = "VIDEO/C102CSQE"
-    day_of_shooting_folder_path = "METADATA/"
-    main(video_file_path, day_of_shooting_folder_path)
+    # dict_test = {'C102C001_2207262N': {'startTC': '17:17:10:14', 'frames': 8172,
+    #                                    'file path': 'VIDEO/C102CSQE/C102CSQE/Clip/C102C001_2207262N/C102C001_2207262N.mxf'}}
+    # video_file_path = "VIDEO/C102CSQE"
+    day_of_shooting_folder_path = "DAY_061/"
+    silverstack_csv = "csv_silverstack/DAY_061.csv"
+    # main_edit_UMC_csv_from_video_files(video_file_path, day_of_shooting_folder_path)
+    main_edit_UMC_csv_from_silverstack_csv(day_of_shooting_folder_path)
