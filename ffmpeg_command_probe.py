@@ -165,12 +165,12 @@ def runFFprobeAndGetJson(commands):
         print ("There was an error running your FFprobe script")
 
 
-def create_dict_meta_for_video_in_day_folder(day_path: str = "VIDEO/C102CSQE", sub_folder_name ="VIDEO") -> dict:
+def create_dict_meta_for_video_in_day_folder(day_path: str = "Other code with umc4 to nuke/C102CSQE", sub_folder_name ="Other code with umc4 to nuke") -> dict:
     """
     main function, enter a directory and get the start tc and total frames of the video file
     :return: timecode and frame duration with ffprobe command
     """
-    # video_path = "VIDEO/C102CSQE"
+    # video_path = "Other code with umc4 to nuke/C102CSQE"
     dict_mxf_tc_frames = {}
     import os
     for root, dir, files in os.walk(os.path.join(day_path, sub_folder_name)):
@@ -208,7 +208,7 @@ if __name__ == "__main__":
 
 # if __name__ == "__main__":
 #     runFFmpeg(buildFFmpegCommand())
-#     video_path = "VIDEO/C102CSQE"
+#     video_path = "Other code with umc4 to nuke/C102CSQE"
 #     list_mxf = []
 #     import os
 #     import json
