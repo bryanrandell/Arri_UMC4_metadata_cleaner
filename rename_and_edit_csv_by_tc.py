@@ -125,8 +125,8 @@ def main_edit_UMC_csv_from_video_files(day_of_shooting_folder_path: str = "METAD
 
 if __name__ == "__main__":
     # dict_test = {'C102C001_2207262N': {'startTC': '17:17:10:14', 'frames': 8172,
-    #                                    'file path': 'Other code with umc4 to nuke/C102CSQE/C102CSQE/Clip/C102C001_2207262N/C102C001_2207262N.mxf'}}
-    # video_file_path = "Other code with umc4 to nuke/C102CSQE"
+    #                                    'file path': 'Other_code_with_umc4_to_nuke/C102CSQE/C102CSQE/Clip/C102C001_2207262N/C102C001_2207262N.mxf'}}
+    # video_file_path = "Other_code_with_umc4_to_nuke/C102CSQE"
     day_of_shooting_folder_path = "DAY_061/"
     silverstack_csv = "csv_silverstack/DAY_061.csv"
     # main_edit_UMC_csv_from_video_files(video_file_path, day_of_shooting_folder_path)
