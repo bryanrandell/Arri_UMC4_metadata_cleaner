@@ -6,12 +6,12 @@ import os
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("CSV METADATA UTILITY")
+        self.setWindowTitle("CSV UMC4 METADATA UTILITY")
         self.main_widget = QVBoxLayout()
         self.setLayout(self.main_widget)
 
-        self.button_select_csv = QPushButton("Import csv file")
-        self.button_select_csv.clicked.connect(self.import_csv_file)
+        self.button_select_csv = QPushButton("Import UMC4 META csv file")
+        self.button_select_csv.clicked.connect(self.import_umc4_csv_file)
 
         self.button_select_folder = QPushButton("Import Master Folder")
         self.button_select_folder.clicked.connect(self.import_folder)
@@ -42,7 +42,15 @@ class MainWindow(QWidget):
         self.main_widget.addWidget(self.label_check_copy)
 
 
-    def import_csv_file(self):
+    def import_umc4_csv_file(self):
+        csv_file_path, _ = QFileDialog.getOpenFileName(self, 'Open file', './')
+        header, rows = csv_lds_reader.convert_csv_to_list(csv_file_path)
+        start_tc = csv_lds_reader.extract_start_tc(rows)
+        total_frame = csv_lds_reader.extract_total_frames(rows)
+        self.label_start_tc.setText(start_tc)
+        self.label_total_frame.setText(total_frame)
+
+    def import_silverstack_csv_file(self):
         csv_file_path, _ = QFileDialog.getOpenFileName(self, 'Open file', './')
         header, rows = csv_lds_reader.convert_csv_to_list(csv_file_path)
         start_tc = csv_lds_reader.extract_start_tc(rows)
